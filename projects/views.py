@@ -8,3 +8,4 @@ def index(request):
     Function that renders the homepage 
     '''
 
+    return render (request, 'index.html')
