@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from rest_framework.response import Response
 from .models import Project, Profile
 from .forms import UpdateProfile, UploadProject
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.urls import reverse
+from rest_framework.response import Response
 
 # Create your views here.
 def index(request):
@@ -15,7 +15,7 @@ def index(request):
         user = User.objects.get(username=request.user)
         if not Profile.objects.filter(user=request.user).exists():
             Profile.objects.create(user=user)
-    projects = Project.object.order_by('-posted_on')
+    projects = Project.objects.order_by('-posted_on')
     return render (request, 'index.html',{"projects":projects})
 
 def profile(request, username):
@@ -49,3 +49,4 @@ def upload_project(request):
     else:
         form = UploadProject()
     return redirect(request, 'upload.html',{'form':form})
+
