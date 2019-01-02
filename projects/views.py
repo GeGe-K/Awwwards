@@ -36,3 +36,16 @@ def update_profile(request, id):
     else:
         form = UpdateProfile()
     return render(request, 'update_profile.html', {'form': form})
+
+@login_required(login_url='/accounts/login/')
+def upload_project(request):
+    if request.method == 'POST':
+        form = UploadProject(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            return redirect('index')
+    else:
+        form = UploadProject()
+    return redirect(request, 'upload.html',{'form':form})
