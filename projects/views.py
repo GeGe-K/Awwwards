@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Project, Profile
+from .models import Project, Profile,Review
 from .forms import UpdateProfile, UploadProject
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.db.models import Avg
 from rest_framework.response import Response
 
 # Create your views here.
@@ -49,4 +50,5 @@ def upload_project(request):
     else:
         form = UploadProject()
     return redirect(request, 'upload.html',{'form':form})
+
 
