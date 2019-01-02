@@ -12,5 +12,4 @@ class UploadProject(forms.ModelForm):
     class Meta:
         model = Project
         exclude = ['user','posted_on']
-        
 
