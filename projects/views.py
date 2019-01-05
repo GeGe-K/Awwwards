@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db.models import Avg
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import ProjectSerializer, ProfileSerializer
 
 # Create your views here.
 def index(request):
@@ -76,11 +78,22 @@ def project(request,id):
 def search_project(request):
     if 'project' in request.GET and request.GET['project']:
         search_term = request.GET.get('project')
-        searched_projects = Project.search_project(search_term)
+        projects = Project.object.filter(title__icontains=search_term)
         message = f'{search_term}'
 
-        return render(request, 'search.html',{'projects':searched_projects, })
+        return render(request, 'search.html',{'projects':projects, 'message':message})
     else:
-        message = "You haven't seaeches for any project"
+        message = "You haven't seaeched for any project"
         return render (request, 'search.html',{"message":message})
 
+class ProjectList(APIView):
+    def get(self, request, format=None):
+        all_projects = Project.objects.all()
+        serializers = ProjectSerializer(all_projects, many=True)
+        return Response(serializers.data)
+
+class ProfileList(APIView):
+    def get(self, request, format=None):
+        all_profiles = Profile.objects.all()
+        serializers = ProfileSerializer(all_profiles, many=True)
+        return Response(serializers.data)
