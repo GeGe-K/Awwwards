@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% if projects %}
+        <h3>Found {{projects|length}} result(s) for {{mesage}}</h3>
+        {% else %}
+        <h3>Found 0 results for {{message}} </h3>
+        {% endif %}
+    </div>
+
+    {% if projects%}
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-md-4">
+            <div class="card">
+                <a href="{% url 'project' project,id %}">
+                    <img src="{{%project.image.url%}}" alt="landing page" class="card-img-top">
+                </a>
+                <div class="card-body">
+                    <h3 class="card-title">{{project.title}}</h3>
+                    <p class="card-text">{{project.description}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

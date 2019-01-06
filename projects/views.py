@@ -11,7 +11,8 @@ from .serializer import ProjectSerializer, ProfileSerializer
 
 # Create your views here.
 def index(request):
-    '''
+    '''  
+
     Function that renders the homepage 
     '''
     if User.objects.filter(username=request.user.username).exists():
@@ -19,7 +20,7 @@ def index(request):
         if not Profile.objects.filter(user=request.user).exists():
             Profile.objects.create(user=user)
     projects = Project.objects.order_by('-posted_on')
-    return render (request, 'index.html',{"projects":projects})
+    return render (request, 'index.html',{"project":project})
 
 def profile(request, username):
     user = User.objects.get(username = username)
@@ -27,7 +28,7 @@ def profile(request, username):
     projects = Project.objects.filter(user = user)
     return render(request, 'profile.html', {'profile':profile, 'projects':projects})
 
-@login_required(login_url='/accounts/login/')
+# @login_required(login_url='/accounts/login/')
 def update_profile(request, id):
     if request.method =="POST":
         profile = Profile.objects.get(id=id)
@@ -40,7 +41,7 @@ def update_profile(request, id):
         form = UpdateProfile()
     return render(request, 'update_profile.html', {'form': form})
 
-@login_required(login_url='/accounts/login/')
+# @login_required(login_url='/accounts/login/')
 def upload_project(request):
     if request.method == 'POST':
         form = UploadProject(request.POST, request.FILES)
@@ -51,28 +52,28 @@ def upload_project(request):
             return redirect('index')
     else:
         form = UploadProject()
-    return redirect(request, 'upload.html',{'form':form})
+    return render(request, 'upload.html',{'form':form})
 
 def project(request,id):
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user)
-    project = Project.objects.get(id=id)
-    reviews = Review.objects.filter(project=project)
-    design = reviews.aggregate(Avg('design'))['design__avg']
-    usability = reviews.aggregate(Avg('usability'))['usability__avg']
-    content = reviews.aggregate(Avg('content'))['content__avg']
-    average = reviews.aggregate(Avg('average'))['average__avg']
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.average = (review.design + review.usability + review.content) / 3
-            review.project = project
-            review.user = user
-            review.save()
-        return redirect('project', id)
-    else:
-        form = ReviewForm
+        project = Project.objects.get(id=id)
+        reviews = Review.objects.filter(project=project)
+        design = reviews.aggregate(Avg('design'))['design__avg']
+        usability = reviews.aggregate(Avg('usability'))['usability__avg']
+        content = reviews.aggregate(Avg('content'))['content__avg']
+        average = reviews.aggregate(Avg('average'))['average__avg']
+        if request.method == 'POST':
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.average = (review.design + review.usability + review.content) / 3
+                review.project = project
+                review.user = user
+                review.save()
+            return redirect('project', id)
+        else:
+            form = ReviewForm
     return render(request, 'project.html', {'project': project, 'reviews':reviews, 'form':form, 'design':design, 'usability':usability, 'content':content, 'average':average})
 
 def search_project(request):

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <img src="{{project.image.url}}" alt="" class="card-img-top">
+        <div class="card-body">
+            <h3 class="card-title">{{project.title}}</h3>
+            <p class="card-text">{{project.description}}</p>
+            <p class="card-text">
+                <a href="{% url 'profile' project.user.username %}" class="card-link">{{project.user.username}}</a>
+            </p>
+            <p class="card-text">Posted on {{project.posted_on | date}}</p>
+            <p class="card-text">
+                <a href="{{project.link}}" class="card-link" target="_blank">Visit Site</a>
+            </p>
+            <p class="card-text">Design - {{design}}</p>
+            <p class="card-text">Usability - {{usability}}</p>
+            <p class="card-text">Content - {{content}}</p>
+            <p class="card-text">Average - {{average}}</p>
+            {% if user.is_authenticated %}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal" data-target="exampleModal">Vote</button>
+            <!-- Voting Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="" enctype="multipart/form-data" method="post">
+                                    {% csrf_token %}
+                                    {% bootstrap_form form %}
+                                    <input type="submit" value="Submit" class="btn btn-secondary btn-sm">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p>Log in to vote</p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Reviewws -->
+    {% if reviews %}
+    <ul class="list-group">
+        {% for review in reviews %}
+        <li class="list-group-item d-flex justify-content between mb-3">
+            <div class="media">
+                <img src="{{review.user.profile.profile_pic.url}}" alt="{{review.user.username}}" class="d-flex align-self-center mr-3" width="64" height="64">
+                <div class="media-body">
+                    <h5 class="mt-0">{{review.user.username}}</h5>
+                    <p>Review</p>
+                    <span>
+                        <p class="mb-0">{{review.design}}</p>
+                    </span>
+                    <span>
+                        <p class="mb-0"> Usability: {{review.usability}}</p>
+                    </span>
+                    <span>
+                        <p class="mb-0">Content: {{review.content}}</p>
+                    </span>
+                    <span>
+                        <p class="mb-0">Average: {{review.average}}</p>
+                    </span>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No reviews</p>
+    {% endif %}
+</div>
+{% endblock %}
