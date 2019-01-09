@@ -1,9 +1,10 @@
 {% extends 'registration/base.html' %}
 {% load bootstrap4 %}
+{% load static %}
 
 {% block content %}
 <div class="container">
-    <div class="card" id="login">
+    <div class="card my-5 w-50 mx-auto text-center" id="login" >
         <div class="card-body">
             <form action="/accounts/login/" method="post">
                 {% csrf_token %}

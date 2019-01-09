@@ -2,9 +2,9 @@
 {% load bootstrap4 %}
 {% block content %}
 <div class="container">
-    <div class="card">
+    <div class="card my-5 w-25 mx-auto text-center" id=register>
         <div class="card-body">
-            <form action="accounts/register" method="post">
+            <form method="post">
                 {% csrf_token %}
                 {% for field in form %}
                 <p>
@@ -18,7 +18,7 @@
                     {% endfor %}
                 </p>
                 {% endfor %}
-                <button type="submit" class="btn btn-secondary btn-sm">Register</button>
+                <button type="submit" class="btn btn-primary btn-sm">Register</button>
             </form>
             <p>Have an account? <a href="/accounts/login">Log in</a></p>
         </div>

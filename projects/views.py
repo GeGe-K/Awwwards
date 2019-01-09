@@ -19,11 +19,12 @@ def index(request):
         user = User.objects.get(username=request.user)
         if not Profile.objects.filter(user=request.user).exists():
             Profile.objects.create(user=user)
-    projects = Project.objects.order_by('-posted_on')
-    return render (request, 'index.html',{"project":project})
+    project= Project.objects.order_by('-posted_on')
+    print(project)
+    return render (request, 'index.html',{'projects':project})
 
-def profile(request, username):
-    user = User.objects.get(username = username)
+def profile(request, id):
+    user = User.objects.get(id=id)
     profile = Profile.objects.get(user = user)
     projects = Project.objects.filter(user = user)
     return render(request, 'profile.html', {'profile':profile, 'projects':projects})
@@ -56,7 +57,7 @@ def upload_project(request):
 
 def project(request,id):
     if request.user.is_authenticated:
-        user = User.objects.get(username=request.user)
+        user = User.objects.get(id=request.user.id)
         project = Project.objects.get(id=id)
         reviews = Review.objects.filter(project=project)
         design = reviews.aggregate(Avg('design'))['design__avg']
@@ -71,9 +72,9 @@ def project(request,id):
                 review.project = project
                 review.user = user
                 review.save()
-            return redirect('project', id)
+            return redirect('index', id)
         else:
-            form = ReviewForm
+            form = ReviewForm()
     return render(request, 'project.html', {'project': project, 'reviews':reviews, 'form':form, 'design':design, 'usability':usability, 'content':content, 'average':average})
 
 def search_project(request):

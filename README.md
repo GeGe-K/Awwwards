@@ -4,7 +4,12 @@
 ### *Gloria Givondo* (21/12/2018)
 
 ## Description
-An application which allows a user to post a project he/she has created and get it reviewed by his/her peers.
+An application which allows a user to post a project he/she has created and get it reviewed by his/her peers according to:
+        
+* Design
+* Usability
+* Content
+
 
 You can view the live link [here](https://awwwwwardz.herokuapp.com/)
 
