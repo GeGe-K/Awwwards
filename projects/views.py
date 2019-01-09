@@ -80,7 +80,7 @@ def project(request,id):
 def search_project(request):
     if 'project' in request.GET and request.GET['project']:
         search_term = request.GET.get('project')
-        projects = Project.object.filter(title__icontains=search_term)
+        projects = Project.objects.filter(title__icontains=search_term)
         message = f'{search_term}'
 
         return render(request, 'search.html',{'projects':projects, 'message':message})
