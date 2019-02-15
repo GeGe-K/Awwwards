@@ -22,7 +22,7 @@ class Project(models.Model):
 
 class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pic/', null=True, blank=True)
-    bio = models.TextField(blank=True)
+    bio = 
     contacts = models.CharField(max_length=50, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
